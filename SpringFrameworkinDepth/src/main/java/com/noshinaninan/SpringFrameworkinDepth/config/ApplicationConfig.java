@@ -4,16 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 
 import com.noshinaninan.SpringFrameworkinDepth.service.GreetingService;
 import com.noshinaninan.SpringFrameworkinDepth.service.OutputService;
 import com.noshinaninan.SpringFrameworkinDepth.service.TimeService;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class ApplicationConfig {
 
-    @Value("Hello")
+    @Value("${app.greeting}")
     private String greeting;
+    @Value("${app.name}")
+    private String name;
+    @Value("#{new Boolean(environment['spring.profiles.active']!='dev')}")
+    private boolean is24;
 
     @Autowired
     private GreetingService greetingService;
@@ -22,16 +29,17 @@ public class ApplicationConfig {
 
     @Bean
     public TimeService timeService(){
-        return new TimeService(true);
+        return new TimeService(is24);
     }
+
 
     @Bean
     public OutputService outputService(){
-        return new OutputService(greetingService, timeService);
+        return new OutputService(greetingService, timeService, name);
     }
 
     @Bean
     public GreetingService greetingService(){
-        return new GreetingService("Hello");
+        return new GreetingService(greeting);
     }
 }
