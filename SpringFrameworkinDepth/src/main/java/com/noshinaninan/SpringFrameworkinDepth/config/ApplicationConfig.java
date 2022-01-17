@@ -1,45 +1,15 @@
 package com.noshinaninan.SpringFrameworkinDepth.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
-
-import com.noshinaninan.SpringFrameworkinDepth.service.GreetingService;
-import com.noshinaninan.SpringFrameworkinDepth.service.OutputService;
-import com.noshinaninan.SpringFrameworkinDepth.service.TimeService;
 
 @Configuration
 @PropertySource("classpath:application.properties")
+@ComponentScan(basePackages = "com.noshinaninan.SpringFrameworkinDepth")
+@EnableAspectJAutoProxy
 public class ApplicationConfig {
 
-    @Value("${app.greeting}")
-    private String greeting;
-    @Value("${app.name}")
-    private String name;
-    @Value("#{new Boolean(environment['spring.profiles.active']!='dev')}")
-    private boolean is24;
 
-    @Autowired
-    private GreetingService greetingService;
-    @Autowired
-    private TimeService timeService;
-
-    @Bean
-    public TimeService timeService(){
-        return new TimeService(is24);
-    }
-
-
-    @Bean
-    public OutputService outputService(){
-        return new OutputService(greetingService, timeService, name);
-    }
-
-    @Bean
-    public GreetingService greetingService(){
-        return new GreetingService(greeting);
-    }
 }
