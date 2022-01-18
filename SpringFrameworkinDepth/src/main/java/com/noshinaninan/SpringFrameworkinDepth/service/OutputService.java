@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.noshinaninan.SpringFrameworkinDepth.aspect.Countable;
+
 @Service
 public class OutputService {
 
@@ -18,7 +20,8 @@ public class OutputService {
         this.greetingService = greetingService;
         this.timeService = timeService;
     }
-
+    
+    @Countable
     public void generateOutput(){
         String output = timeService.getCurrentTime() + " " + greetingService.getGreeting(name);
         System.out.println(output);
